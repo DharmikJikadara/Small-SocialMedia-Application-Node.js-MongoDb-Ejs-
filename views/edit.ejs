@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Post</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar (same as profile) -->
+  <nav class="bg-white shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+    <div class="text-xl font-bold text-gray-800 tracking-wide">
+      Hello, <%= user.name %> 👋
+    </div>
+
+    <form action="/logout" method="POST">
+      <button type="submit"
+        class="bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-md shadow transition duration-200">
+        Logout
+      </button>
+    </form>
+  </nav>
+
+  <!-- Edit Post Section -->
+  <section class="w-full mt-8 px-6">
+    <div class="bg-white rounded-md shadow p-4 max-w-2xl">
+      <!-- Action to update the post -->
+      <form action="/edit/<%= post._id %>" method="POST">
+        <textarea rows="4" id="content" name="content"
+          class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none shadow-sm bg-white"><%= post.content %></textarea>
+
+        <input type="submit" value="Update"
+          class="mt-3 bg-blue-700 hover:bg-blue-800 text-white font-medium px-5 py-2 rounded-md shadow transition" />
+      </form>
+    </div>
+  </section>
+
+</body>
+
+</html>

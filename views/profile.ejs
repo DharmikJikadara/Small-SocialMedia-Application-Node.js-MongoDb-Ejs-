@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script> <!-- Icons -->
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+    
+    <!-- Left: Profile + Greeting -->
+    <div class="flex items-center space-x-4">
+      <!-- Profile Picture Circle -->
+      <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold shadow-md">
+          <img src="/images/uploads/<%= user.profilepic %>" class="w-full h-full rounded-full object-cover">
+      </div>
+      <!-- Greeting -->
+      <div class="text-xl font-bold text-gray-800 tracking-wide">
+        Hello, <%= user.name %> 👋
+      </div>
+    </div>
+
+    <!-- Right: Buttons -->
+    <form action="/logout" method="POST" class="flex items-center space-x-3">
+      <input type="button"
+        onclick="location.href='/upload'"
+        class="bg-blue-500 hover:bg-blue-400 text-white font-medium px-4 py-2 rounded-md shadow transition duration-200" 
+        value="Upload" />
+
+      <button type="submit"
+        class="bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-md shadow transition duration-200">
+        Logout
+      </button>
+    </form>
+  </nav>
+
+  <!-- Create Post Section -->
+  <section class="w-full mt-8 px-6">
+    <div class="bg-white rounded-md shadow p-4 max-w-2xl">
+      <form action="/post" method="POST">
+        <textarea rows="4" id="content" name="content" placeholder="What's on your mind?"
+          class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none shadow-sm bg-white"></textarea>
+
+        <input type="submit" value="Post"
+          class="mt-3 bg-blue-700 hover:bg-blue-800 text-white font-medium px-5 py-2 rounded-md shadow transition" />
+      </form>
+    </div>
+  </section>
+
+  <!-- Posts Section -->
+<section class="w-full mt-10 px-6 space-y-6 max-w-2xl">
+  <% posts.forEach(post => { %>
+    <div class="bg-white rounded-lg shadow-md p-4">
+      <!-- Post Author -->
+      <p class="text-blue-600 font-semibold mb-2">
+        @<%= post.user.name %>
+      </p>
+
+      <!-- Post Content -->
+      <p class="text-gray-800 mb-4"><%= post.content %></p>
+
+      <div class="flex justify-between items-center text-gray-500">
+        <!-- Like Button with Count -->
+        <div class="flex items-center space-x-2">
+          <a href="/like/<%= post._id %>" 
+             class="flex items-center hover:text-blue-600 transition">
+            <%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike" %>
+          </a>
+          <span><%= post.likes.length %></span>
+        </div>
+
+        <!-- Show Edit/Delete only for logged-in user's posts -->
+        <% if (String(post.user._id) === String(user._id)) { %>
+          <div class="flex space-x-4">
+            <div type="button" title="Edit" 
+                 onclick="location.href='/edit/<%= post._id %>'"
+                 class="hover:text-yellow-600 transition cursor-pointer">
+              Edit
+            </div>
+            <form action="/delete/<%= post._id %>" method="POST">
+              <button type="submit" title="Delete"
+                class="text-red-500 hover:text-red-600 transition">
+                Delete
+              </button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  <% }); %>
+</section>
+</body>
+</html>
